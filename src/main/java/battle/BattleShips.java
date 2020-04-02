@@ -19,7 +19,8 @@ public class BattleShips extends HttpServlet {
         var player = new Player();
         player.setName(name);
 
-        var game = GameManager.getIncompleteGameAndJoin(player);
+        var gameMgr = (GameManager) request.getServletContext().getAttribute("gameManager");
+        var game = gameMgr.getIncompleteGameAndJoin(player);
 
         request.getSession().setAttribute("player", player);
         request.getSession().setAttribute("game", game);
