@@ -1,6 +1,7 @@
 package battle;
 
 import model.CellState;
+import model.Game;
 import model.Player;
 
 import javax.servlet.ServletException;
@@ -13,7 +14,6 @@ import java.util.Arrays;
 
 @WebServlet(name = "SetupServlet", urlPatterns = "/setup")
 public class SetupServlet extends HttpServlet {
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] selected = request.getParameterValues("cells");
@@ -30,18 +30,25 @@ public class SetupServlet extends HttpServlet {
         }
 
         if (player.getOwnField().isValid()) {
-            response.sendRedirect("/waitSetup");
+            doGet(request, response);
         } else {
             request.setAttribute("message", "wrong placement!");
             request.getRequestDispatcher("/WEB-INF/setupShips.jsp").include(request, response);
         }
-    }
 
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        request.getRequestDispatcher("/WEB-INF/setupShips.jsp").include(request, response);
+        var player = (Player) request.getSession().getAttribute("player");
+        var game = (Game) request.getSession().getAttribute("game");
+        if (!player.getOwnField().isValid()) {
+            request.getRequestDispatcher("/WEB-INF/setupShips.jsp").include(request, response);
+        } else if (game.getPlayer1().isReadyToPlay() && game.getPlayer2().isReadyToPlay()) {
+            response.sendRedirect("/game");
+        } else {
+            request.getRequestDispatcher("/WEB-INF/waitSetup.jsp").include(request, response);
+        }
     }
 
 }

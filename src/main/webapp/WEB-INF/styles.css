@@ -1,0 +1,25 @@
+
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+td {
+    text-align: center;
+    width: 25px;
+    height: 25px;
+}
+
+td.SHIP {
+    background-color: plum;
+}
+
+td.MISS {
+    background-color: orange;
+}
+
+td.HIT {
+    background-color: yellow;
+}
